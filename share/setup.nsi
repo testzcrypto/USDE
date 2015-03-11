@@ -20,7 +20,7 @@ SetCompressor /SOLID lzma
 !define MUI_STARTMENUPAGE_REGISTRY_KEY ${REGKEY}
 !define MUI_STARTMENUPAGE_REGISTRY_VALUENAME StartMenuGroup
 !define MUI_STARTMENUPAGE_DEFAULTFOLDER USDe
-!define MUI_FINISHPAGE_RUN $INSTDIR\usde-qt.exe
+!define MUI_FINISHPAGE_RUN $INSTDIR\usde.exe
 !define MUI_UNICON "..\share\pixmaps\bitcoin.ico"
 !define MUI_UNWELCOMEFINISHPAGE_BITMAP "..\share\pixmaps\nsis-wizard.bmp"
 !define MUI_UNFINISHPAGE_NOAUTOCLOSE
@@ -66,7 +66,7 @@ ShowUninstDetails show
 Section -Main SEC0000
     SetOutPath $INSTDIR
     SetOverwrite on
-    File ..\release\usde-qt.exe
+    File ..\release\usde.exe
     WriteRegStr HKCU "${REGKEY}\Components" Main 1
 SectionEnd
 
@@ -76,7 +76,7 @@ Section -post SEC0001
     WriteUninstaller $INSTDIR\uninstall.exe
     !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
     CreateDirectory $SMPROGRAMS\$StartMenuGroup
-    CreateShortcut "$SMPROGRAMS\$StartMenuGroup\USDe.lnk" $INSTDIR\usde-qt.exe
+    CreateShortcut "$SMPROGRAMS\$StartMenuGroup\USDe.lnk" $INSTDIR\usde.exe
     CreateShortcut "$SMPROGRAMS\$StartMenuGroup\Uninstall USDe.lnk" $INSTDIR\uninstall.exe
     !insertmacro MUI_STARTMENU_WRITE_END
     WriteRegStr HKCU "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$(^Name)" DisplayName "$(^Name)"
@@ -89,8 +89,8 @@ Section -post SEC0001
     WriteRegDWORD HKCU "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$(^Name)" NoRepair 1
     WriteRegStr HKCR "USDe" "URL Protocol" ""
     WriteRegStr HKCR "USDe" "" "URL:USDe"
-    WriteRegStr HKCR "USDe\DefaultIcon" "" $INSTDIR\usde-qt.exe
-    WriteRegStr HKCR "USDe\shell\open\command" "" '"$INSTDIR\usde-qt.exe" "%1"'
+    WriteRegStr HKCR "USDe\DefaultIcon" "" $INSTDIR\usde.exe
+    WriteRegStr HKCR "USDe\shell\open\command" "" '"$INSTDIR\usde.exe" "%1"'
 SectionEnd
 
 # Macro for selecting uninstaller sections
@@ -108,7 +108,7 @@ done${UNSECTION_ID}:
 
 # Uninstaller sections
 Section /o -un.Main UNSEC0000
-    Delete /REBOOTOK $INSTDIR\usde-qt.exe
+    Delete /REBOOTOK $INSTDIR\usde.exe
     DeleteRegValue HKCU "${REGKEY}\Components" Main
 SectionEnd
 
