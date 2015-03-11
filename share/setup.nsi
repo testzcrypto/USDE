@@ -5,7 +5,7 @@ SetCompressor /SOLID lzma
 
 # General Symbol Definitions
 !define REGKEY "SOFTWARE\$(^Name)"
-!define VERSION 1.0.4
+!define VERSION 1.0.5
 !define COMPANY "USDe project"
 !define URL http://explorer.usdetrade.com
 
@@ -45,13 +45,13 @@ Var StartMenuGroup
 !insertmacro MUI_LANGUAGE English
 
 # Installer attributes
-OutFile ..\release\USDe-1.0.4-win32-setup.exe
+OutFile ..\release\USDe-1.0.5-win32-setup.exe
 InstallDir $PROGRAMFILES\USDe
 CRCCheck on
 XPStyle on
 BrandingText " "
 ShowInstDetails show
-VIProductVersion 1.0.4.0
+VIProductVersion 1.0.5.0
 VIAddVersionKey ProductName USDe
 VIAddVersionKey ProductVersion "${VERSION}"
 VIAddVersionKey CompanyName "${COMPANY}"
