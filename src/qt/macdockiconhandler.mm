@@ -1,8 +1,7 @@
-
 #include "macdockiconhandler.h"
 
-#include <QtGui/QMenu>
-#include <QtGui/QWidget>
+#include <QMenu>
+#include <QWidget>
 
 extern void qt_mac_set_dock_menu(QMenu*);
 
@@ -38,8 +37,9 @@ extern void qt_mac_set_dock_menu(QMenu*);
     Q_UNUSED(event)
     Q_UNUSED(replyEvent)
 
-    if (dockIconHandler)
+    if (dockIconHandler) {
         dockIconHandler->handleDockIconClickEvent();
+    }
 }
 
 @end
@@ -55,10 +55,15 @@ MacDockIconHandler::MacDockIconHandler() : QObject()
     [pool release];
 }
 
+void MacDockIconHandler::setMainWindow(QMainWindow *window) {
+    this->mainWindow = window;
+}
+
 MacDockIconHandler::~MacDockIconHandler()
 {
     [this->m_dockIconClickEventHandler release];
     delete this->m_dummyWidget;
+    this->setMainWindow(NULL);
 }
 
 QMenu *MacDockIconHandler::dockMenu()
@@ -68,6 +73,8 @@ QMenu *MacDockIconHandler::dockMenu()
 
 void MacDockIconHandler::setIcon(const QIcon &icon)
 {
+    return;
+#if 0
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     NSImage *image;
     if (icon.isNull())
@@ -83,6 +90,7 @@ void MacDockIconHandler::setIcon(const QIcon &icon)
     [NSApp setApplicationIconImage:image];
     [image release];
     [pool release];
+#endif
 }
 
 MacDockIconHandler *MacDockIconHandler::instance()
@@ -95,5 +103,8 @@ MacDockIconHandler *MacDockIconHandler::instance()
 
 void MacDockIconHandler::handleDockIconClickEvent()
 {
+    this->mainWindow->activateWindow();
+    this->mainWindow->show();
+
     emit this->dockIconClicked();
 }

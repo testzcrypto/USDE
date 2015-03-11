@@ -36,32 +36,19 @@ void Footer::EncodeTo(std::string* dst) const {
   metaindex_handle_.EncodeTo(dst);
   index_handle_.EncodeTo(dst);
   dst->resize(2 * BlockHandle::kMaxEncodedLength);  // Padding
-  PutFixed32(dst, static_cast<uint32_t>(kTable
-Number & 0xffffffffu));
-  PutFixed32(dst, static_cast<uint32_t>(kTable
-Number >> 32));
+  PutFixed32(dst, static_cast<uint32_t>(kTableMagicNumber & 0xffffffffu));
+  PutFixed32(dst, static_cast<uint32_t>(kTableMagicNumber >> 32));
   assert(dst->size() == original_size + kEncodedLength);
 }
 
 Status Footer::DecodeFrom(Slice* input) {
-  const char* 
-_ptr = input->data() + kEncodedLength - 8;
-  const uint32_t 
-_lo = DecodeFixed32(
-_ptr);
-  const uint32_t 
-_hi = DecodeFixed32(
-_ptr + 4);
-  const uint64_t 
- = ((static_cast<uint64_t>(
-_hi) << 32) |
-                          (static_cast<uint64_t>(
-_lo)));
-  if (
- != kTable
-Number) {
-    return Status::InvalidArgument("not an sstable (bad 
- number)");
+  const char* magic_ptr = input->data() + kEncodedLength - 8;
+  const uint32_t magic_lo = DecodeFixed32(magic_ptr);
+  const uint32_t magic_hi = DecodeFixed32(magic_ptr + 4);
+  const uint64_t magic = ((static_cast<uint64_t>(magic_hi) << 32) |
+                          (static_cast<uint64_t>(magic_lo)));
+  if (magic != kTableMagicNumber) {
+    return Status::InvalidArgument("not an sstable (bad magic number)");
   }
 
   Status result = metaindex_handle_.DecodeFrom(input);
@@ -70,8 +57,7 @@ Number) {
   }
   if (result.ok()) {
     // We skip over any leftover data (just padding for now) in "input"
-    const char* end = 
-_ptr + 8;
+    const char* end = magic_ptr + 8;
     *input = Slice(end, input->data() + input->size() - end);
   }
   return result;

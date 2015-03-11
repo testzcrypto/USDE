@@ -23,6 +23,10 @@
 #include <boost/interprocess/ipc/message_queue.hpp>
 #include <boost/algorithm/string/predicate.hpp>
 
+#ifdef Q_OS_MAC
+#include "macdockiconhandler.h"
+#endif
+
 #if defined(BITCOIN_NEED_QT_PLUGINS) && !defined(_BITCOIN_QT_PLUGINS_INCLUDED)
 #define _BITCOIN_QT_PLUGINS_INCLUDED
 #define __INSURE__
@@ -146,9 +150,11 @@ int main(int argc, char *argv[])
     }
 #endif
 
+#if QT_VERSION < 0x050000
     // Internal string conversion is all UTF-8
     QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8"));
     QTextCodec::setCodecForCStrings(QTextCodec::codecForTr());
+#endif
 
     Q_INIT_RESOURCE(bitcoin);
     QApplication app(argc, argv);

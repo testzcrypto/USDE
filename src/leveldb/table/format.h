@@ -65,8 +65,7 @@ class Footer {
 
   // Encoded length of a Footer.  Note that the serialization of a
   // Footer will always occupy exactly this many bytes.  It consists
-  // of two block handles and a 
- number.
+  // of two block handles and a magic number.
   enum {
     kEncodedLength = 2*BlockHandle::kMaxEncodedLength + 8
   };
@@ -76,12 +75,10 @@ class Footer {
   BlockHandle index_handle_;
 };
 
-// kTable
-Number was picked by running
+// kTableMagicNumber was picked by running
 //    echo http://code.google.com/p/leveldb/ | sha1sum
 // and taking the leading 64 bits.
-static const uint64_t kTable
-Number = 0xdb4775248b80fb57ull;
+static const uint64_t kTableMagicNumber = 0xdb4775248b80fb57ull;
 
 // 1-byte type + 32-bit crc
 static const size_t kBlockTrailerSize = 5;
